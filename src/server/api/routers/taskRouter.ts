@@ -12,6 +12,17 @@ export const taskRouter = createTRPCRouter({
     return tasks;
   }),
 
+  getDetails: publicProcedure.input(
+    z.object({
+      id: z.string()
+    })
+  ).query(async ({ctx,input}) => {
+    const taskDetail = ctx.db.task.findUnique({
+      where: {id: input.id}
+    })
+    return taskDetail;
+  }),
+
   create: publicProcedure.input(
     z.object({
       title: z.string(),
