@@ -6,13 +6,16 @@ import TaskModal from "~/components/TaskModal";
 import {HiX} from "react-icons/hi";
 
 import { api } from "~/utils/api";
+import DetailsModal from "~/components/DetailsModal";
 
 export default function Home() {
 
   const [task, setTask] = useState<Task[]>([]);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [modalOpenDetails, setModalOpenDetails] = useState<boolean>(false);
+  const [idTask, setIdTask] = useState<string>("");
 
-  const { data: tasksData, isLoading } = api.task.getAll.useQuery({
+  const { data: tasksData } = api.task.getAll.useQuery({
     onSuccess(data){
       setTask(data)
     }
@@ -24,8 +27,6 @@ export default function Home() {
     }
   });
 
-  if(!tasksData || isLoading) return <p>Loading...</p>
-
   return (
     <>
       <Head>
@@ -36,6 +37,8 @@ export default function Home() {
 
      {modalOpen && <TaskModal setModalOpen={setModalOpen} setTask={setTask}/>}
 
+      {modalOpenDetails && <DetailsModal setModalOpen={setModalOpenDetails} taskId={idTask}/>}
+      
       <main className="mx-auto my-12 max-x-3xl">
         <div className="flex justify-between">
           <h2 className="text-2xl font-semibold">My to-do list</h2>
@@ -43,13 +46,14 @@ export default function Home() {
         </div>
 
         <ul className="mt-4">
-          {tasksData.map((item) => {
+          {tasksData?.map((item) => {
             const {id, title} = item
             return (
               <li key={id} className="flex justify-between items-center">
-                <span>{title}</span>
+                <span onClick={() => { setIdTask(id), setModalOpenDetails(true), console.log(id)}} >{title}</span>
                 <HiX onClick={() => deleteTask({id})} className='cursor-pointer text-lg text-red-500' />
-              </li>)}
+              </li>
+              )}
           )}
         </ul>
       </main>
