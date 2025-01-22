@@ -15,16 +15,30 @@ export default function Home() {
   const [modalOpenDetails, setModalOpenDetails] = useState<boolean>(false);
   const [idTask, setIdTask] = useState<string>("");
 
-  const { data: tasksData } = api.task.getAll.useQuery({
-    onSuccess(data){
-      setTask(data)
+  const { data: tasksData } = api.task.getAll.useQuery();
+  
+  useEffect(() => {
+    if (tasksData) {
+      setTask(tasksData);
     }
-  });
+  }, [tasksData]);
 
   const { mutate: deleteTask} = api.task.delete.useMutation({
     onSuccess(data){
       setTask((prev) => prev.filter((item) => item.id !== data.id))
     }
+  });
+
+  const { mutate: toggleChecked } = api.task.toggleChecked.useMutation({
+    onSuccess(ItemTask) {
+      setTask((prev) =>
+        prev.map((item) =>
+          item.id === ItemTask.id
+            ? { ...item, completed: ItemTask.completed }
+            : item
+        )
+      );
+    },
   });
 
   return (
@@ -46,11 +60,19 @@ export default function Home() {
         </div>
 
         <ul className="mt-4">
-          {tasksData?.map((item) => {
-            const {id, title} = item
+          {task?.map((item) => {
+            const {id, title, completed} = item
             return (
               <li key={id} className="flex justify-between items-center">
-                <span onClick={() => { setIdTask(id), setModalOpenDetails(true), console.log(id)}} >{title}</span>
+                <div>
+                  <input type="checkbox" 
+                  checked={completed}
+                  onChange={() =>{ toggleChecked({
+                    id,
+                    completed:!completed,
+                  })} }/>
+                  <span onClick={() => { setIdTask(id), setModalOpenDetails(true)}} >{title}</span>
+                </div>
                 <HiX onClick={() => deleteTask({id})} className='cursor-pointer text-lg text-red-500' />
               </li>
               )}

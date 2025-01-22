@@ -48,5 +48,18 @@ export const taskRouter = createTRPCRouter({
       where: {id: input.id}
     })
     return deleteTask;
+  }),
+
+  toggleChecked: publicProcedure.input(
+    z.object({
+      id: z.string(),
+      completed: z.boolean()
+    })
+  ).mutation(async ({ctx, input}) => {
+    const checkTask = ctx.db.task.update({
+      where: {id: input.id},
+      data: {completed: input.completed}
+    })
+    return checkTask;
   })
 });
