@@ -14,8 +14,9 @@ export default function Home() {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [modalOpenDetails, setModalOpenDetails] = useState<boolean>(false);
   const [idTask, setIdTask] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const { data: tasksData } = api.task.getAll.useQuery();
+  const { data: tasksData, isError: isTaskError } = api.task.getAll.useQuery();
   
   useEffect(() => {
     if (tasksData) {
@@ -26,7 +27,11 @@ export default function Home() {
   const { mutate: deleteTask} = api.task.delete.useMutation({
     onSuccess(data){
       setTask((prev) => prev.filter((item) => item.id !== data.id))
-    }
+    },
+    onError(error) {
+      setErrorMessage("Failed to delete the task. Please try again.");
+      console.error(error.message);
+    },
   });
 
   const { mutate: toggleChecked } = api.task.toggleChecked.useMutation({
@@ -39,7 +44,18 @@ export default function Home() {
         )
       );
     },
+    onError(error) {
+      setErrorMessage("Failed to update the task status. Please try again.");
+      console.error(error.message); 
+    },
   });
+
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => setErrorMessage(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
 
   return (
     <>
@@ -53,27 +69,35 @@ export default function Home() {
 
       {modalOpenDetails && <DetailsModal setModalOpen={setModalOpenDetails} taskId={idTask}/>}
       
-      <main className="mx-auto my-12 max-x-3xl">
-        <div className="flex justify-between">
-          <h2 className="text-2xl font-semibold">My to-do list</h2>
-          <button type="button" onClick={() => setModalOpen(true)} className="bg-violet-500 transition hover:bg-violet-600 text-sm p-2 rounded-md text-white">Add task</button>
+      <main className="mx-auto my-6 sm:my-12 max-w-xs sm:max-w-md md:max-w-3xl p-4 sm:p-6 bg-gray-50 shadow-lg rounded-lg">
+    <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-700 text-center sm:text-left">
+        My To-Do List
+      </h2>
+          <button type="button" onClick={() => setModalOpen(true)} className="bg-violet-500 hover:bg-violet-600 text-white text-sm sm:text-base px-4 py-2 rounded-md shadow-md transition-all w-full sm:w-auto"
+      >Add task</button>
         </div>
 
-        <ul className="mt-4">
+        <ul className="space-y-3 sm:space-y-1">
           {task?.map((item) => {
             const {id, title, completed} = item
             return (
-              <li key={id} className="flex justify-between items-center">
-                <div>
-                  <input type="checkbox" 
+              <li key={id} className={`flex justify-between items-center bg-white shadow rounded-lg p-4 transition-all ${
+              completed ? "opacity-75 line-through" : "opacity-100"
+            }`}>
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <input type="checkbox"
+                  className="h-4 w-4  text-violet-500 border-gray-300 rounded" 
                   checked={completed}
                   onChange={() =>{ toggleChecked({
                     id,
                     completed:!completed,
                   })} }/>
-                  <span onClick={() => { setIdTask(id), setModalOpenDetails(true)}} >{title}</span>
+                  <span 
+                  className="text-sm sm:text-base md:text-lg cursor-pointer hover:underline break-words"
+                  onClick={() => { setIdTask(id), setModalOpenDetails(true)}} >{title}</span>
                 </div>
-                <HiX onClick={() => deleteTask({id})} className='cursor-pointer text-lg text-red-500' />
+                <HiX onClick={() => deleteTask({id})} className="cursor-pointer text-lg  text-red-500 hover:text-red-600 transition-all" />
               </li>
               )}
           )}

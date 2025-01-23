@@ -18,34 +18,39 @@ export default function TaskModal({ setModalOpen, setTask }) {
         onSuccess(item) {
         setTask((prev) => [...prev, item])
         },
+        onError(error) {
+          console.error("Error adding task:", error.message);
+          alert("Failed to add task. Please try again later.");
+        },
       });
 
 
     return( 
-    <div className='absolute inset-0 flex items-center justify-center bg-black/75'>
-        <div className='space-y-4 bg-white p-3'>
-
+      <div className="absolute inset-0 flex items-center justify-center bg-black/75">
+        <div className="space-y-6 bg-white p-6 shadow-lg rounded-xl relative max-w-md w-full">
+          <h2 className="text-2xl font-bold text-gray-800 text-center">Add New Task</h2>
           <input
             type='text'
             value={title}
             placeholder="Title"
             autoFocus
             onChange={(e) => setTitle(e.target.value)}
-            className='w-full shadow-sm text-xl font-semibold placeholder-black border-b-2 border-transparent focus:outline-none focus:border-black'
+            className="w-full text-lg font-medium placeholder-gray-400 border-b-2 border-gray-300 focus:outline-none focus:border-violet-500 transition"
           />
 
-        <input
-            type='text'
+        {/* mudei para o mais adequado, devido a varias linhas */}
+        <textarea
             value={description}
             placeholder="Description..."
             onChange={(e) => setDescription(e.target.value)}
-            className='w-full rounded-md border-gray-300 bg-gray-200 shadow-sm focus:border-violet-300 focus:ring focus:ring-violet-200 focus:ring-opacity-50'
+            className="w-full h-24 p-2 text-sm placeholder-gray-400 bg-gray-100 rounded-lg border border-gray-300 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-300 transition"
           />
-          <div className='grid grid-cols-2 gap-8'>
+          <div className="flex justify-end gap-4">
             <button
               type='button'
               onClick={() => setModalOpen(false)}
-              className='rounded-md bg-gray-500 p-1 text-xs text-white transition hover:bg-gray-600'>
+              className="px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-lg shadow-sm hover:bg-gray-300 transition"
+              >
               Cancel
             </button>
             <button
@@ -54,7 +59,8 @@ export default function TaskModal({ setModalOpen, setTask }) {
                 addTask({ title: title, description: description })
                 setModalOpen(false)
               }}
-              className='rounded-md bg-violet-500 p-1 text-xs text-white transition hover:bg-violet-600'>
+              className="px-4 py-2 text-sm font-semibold text-white bg-violet-500 rounded-lg shadow-sm hover:bg-violet-600 transition"
+              >
               Add
             </button>
           </div>
