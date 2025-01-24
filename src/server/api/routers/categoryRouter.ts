@@ -14,9 +14,14 @@ export const CategoryRouter = createTRPCRouter({
             id: z.string()
         })
     ).query( async ({ctx, input}) => {
-        const categoryEspecific = ctx.db.category.findUnique({
+        const categoryEspecific = await  ctx.db.category.findUnique({
             where: {id: input.id}
         })
+
+        if (!categoryEspecific) {
+            throw new Error("Categoria não encontrada.");
+          }
+
         return categoryEspecific;
     }),
 });

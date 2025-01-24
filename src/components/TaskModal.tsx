@@ -1,4 +1,4 @@
-import { Task } from "@prisma/client";
+import type { Task } from "@prisma/client";
 import  type { Dispatch, SetStateAction} from "react";
 import {  useState, useEffect  } from "react";
 import { api } from "~/utils/api";
@@ -12,7 +12,7 @@ export default function TaskModal({ setModalOpen, setTask }: TaskModalProps) {
     
     const [title, setTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
-    const [category, setCategory] = useState<string>("Work");
+    const [category, setCategory] = useState<string>("");
     const [categories, setCategories] = useState<{ id: string; name: string; }[]>([])
 
     const { data: categoriesData } = api.category.getCategory.useQuery();
@@ -20,6 +20,7 @@ export default function TaskModal({ setModalOpen, setTask }: TaskModalProps) {
     useEffect(() => {
       if (categoriesData) {
         setCategories(categoriesData);
+        setCategory(categoriesData[0]?.id ?? '')
       }
     }, [categoriesData]);
 
@@ -86,10 +87,14 @@ export default function TaskModal({ setModalOpen, setTask }: TaskModalProps) {
             </button>
             <button
               type='button'
-              onClick={() => {
-                //console.log(category.toString())
-                addTask({ title: title, description: description, category: category.toString() })
-                setModalOpen(false)
+              onClick={async () => {
+                try {
+                 addTask({ title: title, description: description, category: category.toString() });
+                  setModalOpen(false);  
+                } catch (error) {
+                  console.error("Failed to add task", error);
+                  alert("Failed to add task. Please try again later.");
+                }
               }}
               className="px-4 py-2 text-sm font-semibold text-white bg-violet-500 rounded-lg shadow-sm hover:bg-violet-600 transition"
               >

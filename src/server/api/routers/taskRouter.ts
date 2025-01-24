@@ -24,18 +24,31 @@ export const taskRouter = createTRPCRouter({
     z.object({
       title: z.string(),
       description: z.string(),
-      category: z.string()
+      category: z.string()  // ID da categoria
     })
-  ).mutation(async ({input,ctx}) => {
-    const {title, description, category} = input
+  ).mutation(async ({input, ctx}) => {
+    const {title, description, category} = input;
+  
+    // Verifique se a categoria existe
+    const existingCategory = await ctx.db.category.findUnique({
+      where: { id: category }
+    });
+  
+    if (!existingCategory) {
+      throw new Error('Categoria não encontrada');
+    }
+  
+    // Agora crie a tarefa associada à categoria
     const newTask = await ctx.db.task.create({
       data: {
         title,
         description,
         category: {
-          connect: {id: category}}
-      }
+          connect: { id: category },
+        },
+      },
     });
+  
     return newTask;
   }),
 
