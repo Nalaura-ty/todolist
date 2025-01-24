@@ -4,15 +4,20 @@ import {HiX} from "react-icons/hi";
 
 interface DetailsModalProps {
   taskId: string;
+  categoryId: string;
   setModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const DetailsModal: FC<DetailsModalProps> = ({ taskId, setModalOpen }) => {
+const DetailsModal: FC<DetailsModalProps> = ({ taskId, setModalOpen, categoryId }) => {
   const { data, error, isLoading } = api.task.getDetails.useQuery({
     id: taskId, 
   },);
 
-  console.log("API Data:", data, taskId);
+  const { data: dataCategory } = api.category.getCategoryId.useQuery({
+    id: categoryId, 
+  });
+
+  console.log("API Data:", data, dataCategory);
 
   if (isLoading) {
     return (
@@ -43,6 +48,7 @@ const DetailsModal: FC<DetailsModalProps> = ({ taskId, setModalOpen }) => {
 
         <h2 className="text-xl font-bold text-gray-800 mb-4">{data?.title}</h2>
         <p className="text-sm text-gray-600 mb-2">{data?.description}</p>
+        <p className="text-sm text-gray-600 mb-2">{dataCategory?.name}</p>
         <p className="text-sm font-medium mb-2 ">Status:{" "}
         <span
             className={`${
