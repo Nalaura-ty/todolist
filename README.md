@@ -71,6 +71,11 @@ To run this project locally, follow the steps below:
 
    Your application should now be running locally.
 
+## Deployment
+You can access the live version of this application hosted on Vercel:
+
+[Vercel - Live Demo](https://todolist-7b51-jktm8y1oo-ana-lauras-projects-5abe31d7.vercel.app/)
+
 ## Database Schema
 
 ![DER banco de dados](./src/assets/imgs/DER_TODO_LIST.drawio.png)
