@@ -1,8 +1,5 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import { db } from "~/server/db";
-import { title } from "process";
-import { Input } from "postcss";
 
 export const taskRouter = createTRPCRouter({
 
@@ -27,13 +24,16 @@ export const taskRouter = createTRPCRouter({
     z.object({
       title: z.string(),
       description: z.string(),
+      category: z.string()
     })
   ).mutation(async ({input,ctx}) => {
-    const {title, description} = input
+    const {title, description, category} = input
     const newTask = await ctx.db.task.create({
       data: {
         title,
-        description
+        description,
+        category: {
+          connect: {id: category}}
       }
     });
     return newTask;
