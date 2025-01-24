@@ -1,4 +1,4 @@
-import { FC, Dispatch, SetStateAction, useState, useEffect } from "react";
+import type { FC, Dispatch, SetStateAction } from "react";
 import { api } from "~/utils/api";
 import {HiX} from "react-icons/hi";
 
@@ -48,7 +48,7 @@ const DetailsModal: FC<DetailsModalProps> = ({ taskId, setModalOpen, categoryId 
         <h2 className="text-2xl font-bold text-gray-800 mb-4">{data?.title}</h2>
         <p className="text-sm text-gray-600 mb-4">{data?.description}</p>
         <p className="text-sm text-gray-700 mb-2">
-          <span className="font-medium text-gray-800">Categoria:</span> {dataCategory?.name || "Não especificada"}
+          <span className="font-medium text-gray-800">Categoria:</span> {dataCategory?.name ?? "Não especificada"}
         </p>
         {/* <p className="text-sm text-gray-600 mb-2">{dataCategory?.name}</p> */}
         <p className="text-sm mb-2">

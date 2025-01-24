@@ -1,22 +1,21 @@
 import { Task } from "@prisma/client";
-import { FC, Dispatch, SetStateAction, useState, useEffect } from "react";
-import { boolean } from "zod";
+import  type { Dispatch, SetStateAction} from "react";
+import {  useState, useEffect  } from "react";
 import { api } from "~/utils/api";
 
 
-// interface TaskModalProps {
-//     setModalOpen: Dispatch<SetStateAction<boolean>>
-//     setTask: Dispatch<SetStateAction<Task[]>>
-// }
-
-export default function TaskModal({ setModalOpen, setTask }) {
+interface TaskModalProps {
+  setModalOpen: Dispatch<SetStateAction<boolean>>;
+  setTask: Dispatch<SetStateAction<Task[]>>;
+}
+export default function TaskModal({ setModalOpen, setTask }: TaskModalProps) {
     
     const [title, setTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [category, setCategory] = useState<string>("Work");
     const [categories, setCategories] = useState<{ id: string; name: string; }[]>([])
 
-    const { data: categoriesData, isError: isTaskError } = api.category.getCategory.useQuery();
+    const { data: categoriesData } = api.category.getCategory.useQuery();
 
     useEffect(() => {
       if (categoriesData) {
@@ -25,9 +24,19 @@ export default function TaskModal({ setModalOpen, setTask }) {
     }, [categoriesData]);
 
     const { mutate: addTask } = api.task.create.useMutation({
-        onSuccess(item) {
-        setTask((prev) => [...prev, item])
-        },
+      onSuccess(item) {
+        setTask((prev) => [
+          ...prev,
+          {
+            id: item.id,
+            title: item.title,
+            description: item.description,
+            completed: false,
+            createdAt: new Date(),
+            categoryId: item.categoryId, // Ajuste aqui
+          },
+        ]);
+      },
         onError(error) {
           console.error("Error adding task:", error.message);
           alert("Failed to add task. Please try again later.");

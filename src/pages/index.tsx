@@ -1,6 +1,5 @@
-import { Task } from "@prisma/client";
+import type { Task } from "@prisma/client";
 import Head from "next/head";
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import TaskModal from "~/components/TaskModal";
 import {HiX} from "react-icons/hi";
@@ -17,7 +16,7 @@ export default function Home() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [Idcategory, setIdCategory] = useState<string>("");
 
-  const { data: tasksData, isError: isTaskError } = api.task.getAll.useQuery();
+  const { data: tasksData } = api.task.getAll.useQuery();
   
   useEffect(() => {
     if (tasksData) {
@@ -97,8 +96,9 @@ export default function Home() {
                   <span 
                   className="text-sm sm:text-base md:text-lg cursor-pointer hover:underline break-words"
                   onClick={() => { 
-                    setIdCategory(categoryId)
-                    setIdTask(id), setModalOpenDetails(true)
+                    setIdCategory(categoryId ?? "");
+                    setIdTask(id);
+                    setModalOpenDetails(true);
                     }} >{title}</span>
                 </div>
                 <HiX onClick={() => deleteTask({id})} className="cursor-pointer text-lg  text-red-500 hover:text-red-600 transition-all" />
