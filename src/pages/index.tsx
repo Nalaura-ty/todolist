@@ -15,6 +15,7 @@ export default function Home() {
   const [modalOpenDetails, setModalOpenDetails] = useState<boolean>(false);
   const [idTask, setIdTask] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [Idcategory, setIdCategory] = useState<string>("");
 
   const { data: tasksData, isError: isTaskError } = api.task.getAll.useQuery();
   
@@ -67,7 +68,7 @@ export default function Home() {
 
      {modalOpen && <TaskModal setModalOpen={setModalOpen} setTask={setTask}/>}
 
-      {modalOpenDetails && <DetailsModal setModalOpen={setModalOpenDetails} taskId={idTask}/>}
+      {modalOpenDetails && <DetailsModal setModalOpen={setModalOpenDetails} taskId={idTask} categoryId={Idcategory}/>}
       
       <main className="mx-auto my-6 sm:my-12 max-w-xs sm:max-w-md md:max-w-3xl p-4 sm:p-6 bg-gray-50 shadow-lg rounded-lg">
     <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
@@ -80,7 +81,7 @@ export default function Home() {
 
         <ul className="space-y-3 sm:space-y-1">
           {task?.map((item) => {
-            const {id, title, completed} = item
+            const {id, title, completed, categoryId} = item
             return (
               <li key={id} className={`flex justify-between items-center bg-white shadow rounded-lg p-4 transition-all ${
               completed ? "opacity-75 line-through" : "opacity-100"
@@ -95,7 +96,10 @@ export default function Home() {
                   })} }/>
                   <span 
                   className="text-sm sm:text-base md:text-lg cursor-pointer hover:underline break-words"
-                  onClick={() => { setIdTask(id), setModalOpenDetails(true)}} >{title}</span>
+                  onClick={() => { 
+                    setIdCategory(categoryId)
+                    setIdTask(id), setModalOpenDetails(true)
+                    }} >{title}</span>
                 </div>
                 <HiX onClick={() => deleteTask({id})} className="cursor-pointer text-lg  text-red-500 hover:text-red-600 transition-all" />
               </li>
