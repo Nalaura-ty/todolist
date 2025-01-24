@@ -1,29 +1,90 @@
-# Create T3 App
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
-## What's next? How do I make an app with this?
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+# To-Do List Project
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+This is a To-Do List application where you can create, view, update, and delete tasks. It allows you to mark tasks as completed, categorize tasks, and keep track of your tasks efficiently.
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Features
 
-## Learn More
+- **Create Task**: Add new tasks to the to-do list.
+- **View Task Details**: View the details of each task.
+- **Delete Task**: Remove tasks from the list.
+- **View All Tasks**: View all the tasks that have been created.
+- **Mark Task as Completed**: Mark tasks as completed to keep track of progress.
+- **Categorize Tasks**: Assign a category to each task (e.g., Work, Personal, Urgent, etc.) to better organize them.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Prerequisites
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+- Node.js (v14.x or higher)
+- MySQL (used for database)
+- Prisma ORM (for database management)
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Getting Started
 
-## How do I deploy this?
+To run this project locally, follow the steps below:
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+1. **Clone the repository**
+
+   ```bash
+   git clone <repository_url>
+   cd <project_folder>
+   ```
+
+2. **Install dependencies**
+
+   Make sure you have Node.js installed. Then, run:
+
+   ```bash
+   npm install
+   ```
+
+3. **Set up the database**
+
+   You will need to have MySQL installed and running. Once the database is set up, configure the `.env` file with your MySQL connection details.
+
+4. **Migrate the database**
+
+   After cloning the project, run the Prisma migration to set up the database schema:
+
+   ```bash
+   npx prisma migrate deploy
+   ```
+
+   This will apply the necessary database migrations to your MySQL database.
+
+5. **Build the project**
+
+   Before starting the server, build the project:
+
+   ```bash
+   npm run build
+   ```
+
+6. **Start the development server**
+
+   Now, start the server:
+
+   ```bash
+   npm start
+   ```
+
+   Your application should now be running locally.
+
+## Deployment
+You can access the live version of this application hosted on Vercel:
+
+[Vercel - Live Demo](https://todolist-7b51-jktm8y1oo-ana-lauras-projects-5abe31d7.vercel.app/)
+
+## Database Schema
+
+![DER banco de dados](./src/assets/imgs/DER_TODO_LIST.drawio.png)
+
+
+## Contributing
+
+Feel free to fork the repository, create a branch, and submit pull requests for any improvements or bug fixes.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
