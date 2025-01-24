@@ -45,17 +45,20 @@ const DetailsModal: FC<DetailsModalProps> = ({ taskId, setModalOpen, categoryId 
 
         <HiX onClick={() => setModalOpen(false)} className="absolute top-3 right-3 cursor-pointer text-lg text-red-500 hover:text-red-600 transition-all"
     />
-
-        <h2 className="text-xl font-bold text-gray-800 mb-4">{data?.title}</h2>
-        <p className="text-sm text-gray-600 mb-2">{data?.description}</p>
-        <p className="text-sm text-gray-600 mb-2">{dataCategory?.name}</p>
-        <p className="text-sm font-medium mb-2 ">Status:{" "}
-        <span
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">{data?.title}</h2>
+        <p className="text-sm text-gray-600 mb-4">{data?.description}</p>
+        <p className="text-sm text-gray-700 mb-2">
+          <span className="font-medium text-gray-800">Categoria:</span> {dataCategory?.name || "Não especificada"}
+        </p>
+        {/* <p className="text-sm text-gray-600 mb-2">{dataCategory?.name}</p> */}
+        <p className="text-sm mb-2">
+          <span className="font-medium text-gray-800">Status:</span>{" "}
+          <span
             className={`${
-              data?.completed ? "text-green-600" : "text-yellow-600"
-            }`}
+              data?.completed ? "text-green-600" : "text-yellow-500"
+            } font-semibold`}
           >
-             {data?.completed ? "Completed" : "Incomplete"}
+            {data?.completed ? "Concluída" : "Incompleta"}
           </span>
         </p>
         <p className="text-xs text-gray-500">Created At: {new Date(data?.createdAt).toLocaleString()}</p>
