@@ -74,7 +74,7 @@ To run this project locally, follow the steps below:
 ## Deployment
 You can access the live version of this application hosted on Vercel:
 
-[Vercel - Live Demo](https://todolist-wx4i.vercel.app/)
+[Vercel - Live Demo](todolist-wx4i-3vhajefmx-ana-lauras-projects-5abe31d7.vercel.app)
 
 ## Database Schema
 
